@@ -1,0 +1,103 @@
+import { useState, useEffect, useRef } from 'react';
+
+const slides = [
+  {
+    image: 'https://via.placeholder.com/1600x500?text=4on4+Adventure+Cars',
+    caption: 'Experience Through Adventure',
+    link: '#available-cars'
+  },
+  {
+    image: 'https://via.placeholder.com/1600x500?text=Reliable+Drivers',
+    caption: 'Reliable Cars & Trusted Drivers',
+    link: '#drivers'
+  },
+  {
+    image: 'https://via.placeholder.com/1600x500?text=Book+Your+Trip',
+    caption: 'Book Your Trip With Ease',
+    link: '#booking'
+  }
+];
+
+export default function Carousel() {
+  const [current, setCurrent] = useState(0);
+  const touchStartX = useRef(null);
+  const touchEndX = useRef(null);
+
+  // Auto-slide
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrent((prev) => (prev + 1) % slides.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Swipe logic
+  const handleTouchStart = (e) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchMove = (e) => {
+    touchEndX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStartX.current || !touchEndX.current) return;
+
+    const delta = touchStartX.current - touchEndX.current;
+    if (delta > 50) {
+      // Swipe left
+      setCurrent((prev) => (prev + 1) % slides.length);
+    } else if (delta < -50) {
+      // Swipe right
+      setCurrent((prev) => (prev - 1 + slides.length) % slides.length);
+    }
+
+    touchStartX.current = null;
+    touchEndX.current = null;
+  };
+
+  return (
+    <div className="relative w-full overflow-hidden select-none">
+      <div
+        className="flex transition-transform duration-700"
+        style={{ transform: `translateX(-${current * 100}%)` }}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+      >
+        {slides.map((slide, index) => (
+          <a
+            key={index}
+            href={slide.link}
+            className="min-w-full relative cursor-pointer"
+          >
+            <img
+              src={slide.image}
+              alt={slide.caption}
+              className="w-full h-[500px] object-cover"
+            />
+            <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+              <h2 className="text-white text-3xl md:text-5xl font-bold text-center px-4">
+                {slide.caption}
+              </h2>
+            </div>
+          </a>
+        ))}
+      </div>
+
+      {/* Dot indicators */}
+      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
+        {slides.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => setCurrent(index)}
+            className={`w-3 h-3 rounded-full transition-all duration-300 ${
+              index === current ? 'bg-white' : 'bg-gray-400'
+            }`}
+            aria-label={`Slide ${index + 1}`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}

@@ -1,0 +1,43 @@
+[
+    {
+      "id": 1,
+      "model": "Toyota Land Cruiser",
+      "numberPlate": "KAA 111A",
+      "driver": "Jack Jack",
+      "tripType": "Adventure",
+      "seats": 7,
+      "language": "English",
+      "image": "https://via.placeholder.com/300x200?text=Toyota+Land+Cruiser"
+    },
+    {
+      "id": 2,
+      "model": "Nissan Patrol",
+      "numberPlate": "KAB 222B",
+      "driver": "John Doe",
+      "tripType": "Business",
+      "seats": 5,
+      "language": "Swahili",
+      "image": "https://via.placeholder.com/300x200?text=Nissan+Patrol"
+    },
+    {
+      "id": 3,
+      "model": "Mitsubishi Pajero",
+      "numberPlate": "KAC 333C",
+      "driver": "Mary W.",
+      "tripType": "Tour",
+      "seats": 6,
+      "language": "English",
+      "image": "https://via.placeholder.com/300x200?text=Mitsubishi+Pajero"
+    },
+    {
+      "id": 4,
+      "model": "Range Rover Evoque",
+      "numberPlate": "KAD 444D",
+      "driver": "Brian C.",
+      "tripType": "VIP",
+      "seats": 4,
+      "language": "French",
+      "image": "https://via.placeholder.com/300x200?text=Range+Rover+Evoque"
+    }
+  ]
+  
