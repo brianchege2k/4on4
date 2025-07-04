@@ -2,20 +2,20 @@ import { useState, useEffect, useRef } from 'react';
 
 const slides = [
   {
-    image: 'https://via.placeholder.com/1600x500?text=4on4+Adventure+Cars',
+    image: '/img/toyota-landcruiser.png',
     caption: 'Experience Through Adventure',
-    link: '#available-cars'
+    link: '#available-cars',
   },
   {
     image: 'https://via.placeholder.com/1600x500?text=Reliable+Drivers',
     caption: 'Reliable Cars & Trusted Drivers',
-    link: '#drivers'
+    link: '#drivers',
   },
   {
     image: 'https://via.placeholder.com/1600x500?text=Book+Your+Trip',
     caption: 'Book Your Trip With Ease',
-    link: '#booking'
-  }
+    link: '#booking',
+  },
 ];
 
 export default function Carousel() {
@@ -23,7 +23,7 @@ export default function Carousel() {
   const touchStartX = useRef(null);
   const touchEndX = useRef(null);
 
-  // Auto-slide
+  // Auto-slide every 5 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrent((prev) => (prev + 1) % slides.length);
@@ -31,7 +31,7 @@ export default function Carousel() {
     return () => clearInterval(interval);
   }, []);
 
-  // Swipe logic
+  // Touch swipe handlers
   const handleTouchStart = (e) => {
     touchStartX.current = e.touches[0].clientX;
   };
@@ -42,13 +42,11 @@ export default function Carousel() {
 
   const handleTouchEnd = () => {
     if (!touchStartX.current || !touchEndX.current) return;
-
     const delta = touchStartX.current - touchEndX.current;
+
     if (delta > 50) {
-      // Swipe left
       setCurrent((prev) => (prev + 1) % slides.length);
     } else if (delta < -50) {
-      // Swipe right
       setCurrent((prev) => (prev - 1 + slides.length) % slides.length);
     }
 
@@ -57,10 +55,14 @@ export default function Carousel() {
   };
 
   return (
-    <div className="relative w-full overflow-hidden select-none">
+    <div className="relative w-full h-[500px] select-none">
+      {/* Slides Container */}
       <div
-        className="flex transition-transform duration-700"
-        style={{ transform: `translateX(-${current * 100}%)` }}
+        className="flex transition-transform duration-700 ease-in-out"
+        style={{
+          width: `${slides.length * 100}%`,
+          transform: `translateX(-${current * (100 / slides.length)}%)`,
+        }}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
@@ -69,14 +71,21 @@ export default function Carousel() {
           <a
             key={index}
             href={slide.link}
-            className="min-w-full relative cursor-pointer"
+            className="flex-shrink-0 relative"
+            style={{ width: `${100 / slides.length}%` }}
           >
             <img
               src={slide.image}
               alt={slide.caption}
               className="w-full h-[500px] object-cover"
+              onLoad={(e) =>
+                console.log(
+                  `Image loaded: ${slide.image}, width: ${e.target.naturalWidth}, height: ${e.target.naturalHeight}`
+                )
+              }
+              onError={() => console.error(`Failed to load image: ${slide.image}`)}
             />
-            <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+            <div className="absolute inset-0 bg-opacity-40 flex items-center justify-center">
               <h2 className="text-white text-3xl md:text-5xl font-bold text-center px-4">
                 {slide.caption}
               </h2>
@@ -85,7 +94,7 @@ export default function Carousel() {
         ))}
       </div>
 
-      {/* Dot indicators */}
+      {/* Dot Indicators */}
       <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
         {slides.map((_, index) => (
           <button

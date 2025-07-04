@@ -3,7 +3,7 @@ import Navbar from '../components/Navbar';
 import Filters from '../components/Filters';
 import CarCard from '../components/CarCard';
 import Carousel from '../components/Carousel';
-
+import Footer from '../components/Footer';
 export default function Home() {
   const [allCars, setAllCars] = useState([]);
   const [search, setSearch] = useState('');
@@ -54,6 +54,8 @@ export default function Home() {
           )}
         </div>
       </div>
+      <Footer />
+
     </div>
   );
 }
